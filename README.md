@@ -1,4 +1,4 @@
-# Python programming course
+# Robot Operating System course
 
 Contents:
 

@@ -1,0 +1,3 @@
+<launch>
+ 	 <node name="nodeName" pkg="package" type="executable"/>
+</launch>

@@ -1,0 +1,559 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MUW Presentation
+% LaTeX Template
+% Version 1.0 (27/12/2016)
+%
+% License:
+% CC BY-NC-SA 4.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+% Created by:
+% Nicolas Ballarini, CeMSIIS, Medical University of Vienna
+% nicoballarini@gmail.com
+% http://statistics.msi.meduniwien.ac.at/
+%
+% Customized for UAH by:
+% David F. Barrero, Departamento de Automática, UAH
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,compress]{beamer} % Change 10pt to make fonts of a different size
+\mode<presentation>
+
+\usepackage[spanish]{babel}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage{xcolor}
+\usepackage{xstring}
+\usepackage{listings}
+
+\usetheme{UAH}
+\usecolortheme{UAH}
+\setbeamertemplate{navigation symbols}{} 
+\setbeamertemplate{caption}[numbered]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Presentation Info
+\title[Programming ROS with Python]{Programming ROS with Python}
+\author{}
+\institute{\asignatura}
+\date{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Descomentar para habilitar barra de navegación superior
+\ponerNavegacion
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Configuración de logotipos en portada
+%% Opacidad de los logotipos
+\newcommand{\opacidad}{1}
+%% Descomentar para habilitar logotipo en pié de página de portada
+\renewcommand{\logoUno}{Images/isg.png}
+%% Descomentar para habilitar logotipo en pié de página de portada
+%\renewcommand{\logoDos}{Images/CCLogo.png}
+%% Descomentar para habilitar logotipo en pié de página de portada
+%\renewcommand{\logoTres}{Images/ALogo.png}
+%% Descomentar para habilitar logotipo en pié de página de portada
+%\renewcommand{\logoCuatro}{Images/ELogo.png}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% FOOTLINE
+%% Comment/Uncomment the following blocks to modify the footline
+%% content in the body slides. 
+
+
+%% Option A: Title and institute
+\footlineA
+%% Option B: Author and institute
+%\footlineB
+%% Option C: Title, Author and institute
+%\footlineC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Use this block for a blue title slide with modified footline
+{\titlepageBlue
+    \setbeamertemplate{headline}{}
+	\setbeamercolor{frametitle}{bg=black}
+	\setbeamercolor{normal text}{bg=black}
+    \begin{frame}
+        \titlepage
+    \end{frame}
+}
+
+\begin{frame}[plain]{}
+   \begin{block}{Objectives}
+       \begin{itemize}
+	   	\item Introduce the \texttt{catkin} build system
+       	\item Implement ROS nodes with Python
+       \end{itemize}
+   \end{block}
+
+   \begin{block}{Bibliography}
+       Rospy package tutorials \href{http://wiki.ros.org/rospy/Tutorials}{(Link)}
+   \end{block}
+
+\end{frame}
+
+{
+\eliminarNavegacion
+\begin{frame}[shrink]{Table of Contents}
+ \frametitle{Table of Contents}
+ \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+}
+
+\section{Overview}
+
+\begin{frame}{Overview}
+	Two native languages: C++ and Python
+	\begin{itemize}
+		\item C++ good for high performance
+		\item Python good for prototyping
+  	\end{itemize}
+	ROS has its own build system, named \alert{catkin}
+	\begin{itemize}
+		\item Similar to \texttt{make}
+		\item Built on \texttt{CMake}
+		\item Make uses \texttt{Makefile}, catkin uses \texttt{CMakeLists.txt}
+		\item[] \texttt{(Note: \texttt{rosbuild} is deprecated)}
+  	\end{itemize}
+	As almost everything in ROS, catkin is a package
+	\begin{itemize}
+		\item Documented in \url{http://wiki.ros.org/catkin}
+		\item \href{http://wiki.ros.org/catkin/conceptual\_overview}{(Suggested read)}
+	\end{itemize}
+\end{frame}
+
+\section{Catkin workspaces}
+\subsection{Spaces}
+\begin{frame}[fragile]{Catkin workspaces}{Spaces (I)}
+	Catkin requires a \alert{workspace}
+	\begin{itemize}
+		\item Folder where install, modify and build packages
+		\item Located in \texttt{\textasciitilde/catkin\_ws} in our VM
+	\end{itemize}
+	\vspace{0.6cm}
+	Three folders (\alert{spaces}, in ROS' terminology) in a workspace
+ 	 	\begin{itemize}
+		\item[\texttt{src}] Packages source code
+		\item[\texttt{build}] Intermediate build files
+		\item[\texttt{devel}] Intermediate installation files. \textit{Environment scripts}
+		\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Catkin workspaces}{Spaces (II)}
+\tiny{
+    \begin{columns}
+ 	   \column{.80\textwidth}
+	   \begin{block}{Typical catkin workspace}
+\begin{verbatim}
+workspace_folder/         -- WORKSPACE
+  src/                    -- SOURCE SPACE
+      CMakeLists.txt        -- The 'toplevel' CMake file
+      package_1/
+          CMakeLists.txt
+          package.xml
+          ...
+      package_n/
+          CMakeLists.txt
+          package.xml
+          ...
+  build/                  -- BUILD SPACE
+      CATKIN_IGNORE         -- Keeps catkin from walking this directory
+  devel/                  -- DEVELOPMENT SPACE (set by CATKIN_DEVEL_PREFIX)
+      bin/
+      etc/
+      include/
+      lib/
+      share/
+      .catkin
+      env.bash
+      setup.bash
+      setup.sh
+      ...
+\end{verbatim}
+	   \end{block}
+	   \end{columns}
+	   }
+\end{frame}
+
+\subsection{Workspace creation}
+\begin{frame}{Catkin workspaces}{Workspace creation}
+	Creation of a new catkin workspace
+	\begin{enumerate}
+		\item Create folder: \texttt{mkdir -p \textasciitilde/catkin\_ws/src}
+		\item Change working directory: \texttt{cd \textasciitilde/catkin\_ws/src}
+		\item Initialize WS: \texttt{catkin\_init\_workspace}
+  	\end{enumerate}
+
+	(Already done in the VM)
+\end{frame}
+
+\section{Catkin packages}
+\subsection{Package creation}
+\begin{frame}[fragile]{Catkin packages}{Package creation}
+	\vspace{-0.2cm}
+    \begin{columns}
+ 	   \column{.40\textwidth}
+	   \begin{block}{Simplest package}
+\begin{verbatim}
+myPackage/
+    CMakeLists.txt
+    package.xml
+\end{verbatim}
+	   \end{block}
+	\end{columns}
+	\bigskip
+	Creation of a new package (from the workspace)
+	\begin{enumerate}
+		\item \texttt{catkin\_create\_pkg <package\_name> [depend1] [depend2] [depend3]}
+		\item[] Example: \texttt{catkin\_create\_pkg myPackage std\_msgs rospy}
+		\item Customize \texttt{package.xml}
+	\end{enumerate}
+	Warning: Package still not available
+\end{frame}
+
+\subsection{Package build}
+\begin{frame}[fragile]{Catkin packages}{Package build}
+	To build the workspace: \texttt{catkin\_make targets}
+	\begin{itemize}
+		\item From the folder \texttt{src}
+		\item Uses a \texttt{CMakeLists.txt} file
+		\item By default builds all the packages
+	\end{itemize}
+	To execute the node
+	\begin{enumerate}
+		\item Make it accesible: \texttt{source devel/setup.bash}
+		\item Execute it: \texttt{rosrun package node}
+		\item[] Warning: package is given in \texttt{packages.xml}
+	\end{enumerate}
+	To install a package: \texttt{catkin\_make install}
+\end{frame}
+
+\subsection{Exercise}
+\begin{frame}[fragile]{Catkin packages}{Exercise (I)}
+	Implement a ``Hello, world'' node
+	\begin{itemize}
+		\item Create a \texttt{exercises} package dependent on \texttt{rospy}
+		\item Customize \texttt{package.xml}
+		\item Create a folder named \texttt{scripts}
+		\item Create a file named \texttt{hello.py}
+		\item Give execution permissions to \texttt{hello.py}
+		\item Edit the file (next slide)
+		\item Build the project
+		\item Run \texttt{source devel/setup.bash}
+		\item Execute \texttt{roscore}
+		\item In other tab, execute the node (\texttt{hello.py})
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Catkin packages}{Exercise (II)}
+	\begin{block}{scripts/hello.py}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/hello.py}
+	\end{block}
+	Extra points: Run \texttt{hello.py} with a launch file
+\end{frame}
+
+\section{Nodes programming with Python}
+
+\subsection{Topics}
+\begin{frame}[fragile]{Nodes programming with Python}{Topics (I)}
+	\begin{itemize}
+		\item Code stored in folder \texttt{scripts}
+		\item Scripts must have execution permissions
+		\item Must import \texttt{rospy} Python module
+		\item Must init the node: \texttt{rospy.init\_node('name')}
+		\item Convenient assets
+			\begin{itemize}
+			\item \texttt{Rate} class and \texttt{sleep()} method
+			\item \texttt{rospy.is\_shutdown()}
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Topics (II)}
+    \vspace{-0.2cm}
+	\begin{block}{scripts/talker.py}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/talker.py}
+    \vspace{-0.2cm}
+	\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Nodes programming with Python}{Topics (III)}
+	\label{listener}
+    \vspace{-0.4cm}
+	\begin{block}{scripts/listener.py}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/listener.py}
+    \vspace{-0.2cm}
+	\end{block}
+
+    \vspace{-1.7cm}
+	\begin{columns}
+ 	\column{.4\textwidth}
+ 	\column{.4\textwidth}
+    \vspace{-0.2cm}
+	\begin{exampleblock}{std\_msgs/msg/String.msg}
+\begin{verbatim}
+string data
+\end{verbatim}
+    \vspace{-0.3cm}
+	\end{exampleblock}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Topics (IV): Exercise}
+	Run the example
+	\begin{enumerate}
+		\item Make them accesible: \texttt{source devel/setup.bash}
+		\item Initialize ROS: \texttt{roscore}
+		\item Execute the nodes: 
+			\begin{itemize}
+				\item \texttt{rosrun exercises talker.py}
+				\item \texttt{rosrun exercises listener.py}
+			\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Topics (V)}
+	ROS only provides a callback to read topics
+	\begin{itemize}
+		\item Reading just the last message is not out-of-the-box
+	\end{itemize}
+	A common practice is to have a listener in background
+	\begin{itemize}
+		\item Updates a global variable with the message
+	\end{itemize}
+
+    \vspace{-0.2cm}
+	\begin{exampleblock}{Example}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/odom.py}
+    \vspace{-0.3cm}
+	\end{exampleblock}
+
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Topics (VI): Exercise}
+	Excercise:
+	\begin{enumerate}
+		\item Modify listener in slide~\pageref{listener} to store the last message
+		\item Show the message five times per second
+		\begin{itemize}
+			\item Hint: Use \texttt{rospy.Rate()} and \texttt{rospy.spin()}
+		\end{itemize}
+	\end{enumerate}
+\end{frame}
+
+\subsection{Messages}
+\begin{frame}[fragile]{Nodes programming with Python}{Messages (I)}
+	Same structure in Python than in the \texttt{msg} file
+    \begin{columns}
+ 	   \column{.50\textwidth}
+	\begin{exampleblock}{\texttt{geometry\_msgs/Twist.msg}}
+	\begin{verbatim}
+Vector3  linear
+Vector3  angular
+\end{verbatim}
+	\end{exampleblock}
+	\begin{exampleblock}{\texttt{geometry\_msgs/Vector3.msg}}
+	\begin{verbatim}
+float64 x
+float64 y
+float64 z
+\end{verbatim}
+	\end{exampleblock}
+ 	   \column{.50\textwidth}
+    \vspace{-0.2cm}
+	\begin{block}{Message usage}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/mensaje.py}
+    \vspace{-0.2cm}
+	\end{block}
+	\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Nodes programming with Python}{Messages (II)}
+	\vspace{-0.8cm}
+	\begin{center}
+	\begin{tabular}{lc} \hline
+	  {\sc Type} & {\sc Keyword}\\ \hline
+	Integer & int8, int16, int32, int64 (plus uint*)\\
+	Float & float32, float64\\
+	String & string\\
+	Time & time, duration\\
+	Variable-length array &  array[] (example: float32[])\\
+	Fixed-length array	 & array[C] (example: float32[5])\\
+	Struct & other msg files\\
+	  \hline  
+	\end{tabular}
+	\end{center}
+	\vspace{-0.2cm}
+	Custom messages need wrappers classes
+	\begin{itemize}
+		\item Automatically generated by catkin
+		\item Requires configure dependencies (i.e. set up \texttt{packages.xml} and \texttt{CMakeLists.txt})
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Nodes programming with Python}{Messages (III)}
+	Implement the following tasks:
+	\begin{enumerate}
+		\item Execute roscore
+		\item Execute \texttt{rosrun turtlesim turtlesim\_node}
+		\item Implement a node that moves the turtle forward with constant velocity
+		\item Implement a node that shows the turtle pose
+	\end{enumerate}
+	Execute \texttt{roslaunch stdr\_launchers server\_with\_map\_and\_gui\_plus\_robot.launch} and write a node that
+	\begin{enumerate}
+		\item Shows the odometry as it appears
+		\item Shows sonar measures as they appear
+		\item Stores the last odometry and sensor measures
+	\end{enumerate}
+
+\end{frame}
+
+\subsection{Services}
+\begin{frame}[fragile]{Nodes programming with Python}{Services: Setting up the build-system (I)}
+	Automatic generation of proxies (proxy $=$ interface)
+	\begin{itemize}
+		\item Python and C++
+		\item Similar messages and services
+		\item Stored in \small{\texttt{\$(WS)/devel/lib/python2.7/dist-packages}}
+	\end{itemize}
+	Modify \texttt{packages.xml} and \texttt{CMakeLists.txt} to inform catkin
+	\begin{itemize}
+		\item \href{http://wiki.ros.org/ROS/Tutorials/CreatingMsgAndSrv}{(More info)} \href{http://answers.ros.org/question/114806/tutorial-116-importerror-no-module-named-beginner\_tutorialssrv-with-catkin-system-build/}{(More)}
+	\end{itemize}
+	Service creation process:
+	\begin{enumerate}
+			\item Create the \texttt{srv} file in folder \texttt{srv}
+			\item Enable code generation by editting \texttt{packages.xml}
+			\begin{verbatim}
+<build_depend>message_generation</build_depend>
+<run_depend>message_runtime</run_depend>
+\end{verbatim}
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Nodes programming with Python}{Services: Setting up the build-system (II)}
+	\begin{enumerate}
+		\setcounter{enumi}{2}
+		\item Add dependency to \texttt{CMakeLists.txt}, uncommenting 
+			\begin{verbatim}
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  message_generation
+}
+\end{verbatim}
+		\item Add service file
+			\begin{verbatim}
+add_service_files(
+  FILES
+  AddTwoInts.srv
+)
+\end{verbatim}
+		\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{Nodes programming with Python}{Services: Service provider (I)}
+	Two components
+	\begin{itemize}
+		\item Provider and consumer (or server and client)
+		\item Both uses proxyes (like local function calls)
+		\item Both implemented in nodes
+	\end{itemize}
+	Service provider
+	\begin{itemize}
+		\item Method \texttt{rospy.Service()}
+		\item Request as \texttt{fooRequest}
+		\item Response as \texttt{fooResponse}
+	\end{itemize}
+
+	\vspace{-2cm}
+
+    \begin{columns}
+ 	   \column{.70\textwidth}
+ 	   \column{.30\textwidth}
+	\begin{exampleblock}{AddTwoInts.srv}
+		\begin{verbatim}
+int64 a
+int64 b
+---
+int64 sum
+\end{verbatim}
+    \vspace{-0.3cm}
+	\end{exampleblock}
+	\end{columns}
+
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Services: Service provider (II)}
+    \vspace{-0.2cm}
+	\begin{block}{scripts/add\_two\_ints\_server.py}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/server.py}
+    \vspace{-0.2cm}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Nodes programming with Python. Services: Service consumer (I)}
+	Two methods
+	\begin{itemize}
+		\item Wait until service available: \texttt{rospy.wait\_for\_service()}
+		\item Get proxy: \texttt{rospy.ServiceProxy()}
+	\end{itemize}
+	Exception: \texttt{rospy.ServiceException}
+\end{frame}
+
+\begin{frame}[plain]{Nodes programming with Python. Services: Service consumer (II)}
+\tiny{
+    \vspace{-0.2cm}
+	\begin{block}{scripts/add\_two\_ints\_client.py.py}
+    \vspace{-0.2cm}
+        \lstinputlisting[language=python, basicstyle=\ttfamily\scriptsize]{code/client.py}
+    \vspace{-0.2cm}
+	\end{block}
+
+	}
+\end{frame}
+
+\begin{frame}{Nodes programming with Python}{Services: Exercises}
+	Run the previous examples
+	\begin{enumerate}
+		\item Make them accesible: \texttt{source dev/setup.bash}
+		\item Initialize ROS: \texttt{roscore}
+		\item Execute the nodes: 
+			\begin{itemize}
+				\item \texttt{rosrun myPackage add\_two\_ints\_client.py}
+				\item \texttt{rosrun myPackage add\_two\_ints\_client.py 5 6}
+			\end{itemize}
+	\end{enumerate}
+	Execute STDR with a robot
+	\begin{enumerate}
+		\item Invoke programmatically a service to move the robot to coordinates $(15, 15)$
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exercises}
+	Implement the following tasks in ROS
+	\begin{enumerate}
+		\item Launch STDR with any robot
+		\item Move the robot four distance units to the east
+		\item[] Hint: Use odometry
+		\item Move the robot four distance units to the east and then one to the north
+		\item Move the robot to the opposite side of the map
+	\end{enumerate}
+\end{frame}
+
+\end{document}

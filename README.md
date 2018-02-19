@@ -1,2 +1,17 @@
-# rosCourse
-Course to introduce the Robot Operating System (ROS)
+# Python programming course
+
+Contents:
+
+1.- [Introduction to Robot Operating System](1-introduction/introduction.pdf)
+
+2.- [ROS architecture](2-architecture/architecture.pdf)
+
+3.- [Programming ROS with Python](3-programming/programming.pdf)
+
+# Compilation
+
+Compile slides with xelatex or lualatex. Custom UAH fonts are needed to properly compile the project. The original template used to format the slides, including the fonts, can be downloaded from (https://github.com/dfbarrero/UAH-beamer-template).
+
+# Credits
+
+This course is based on the [ROS official tutorials](http://wiki.ros.org/ROS/Tutorials).

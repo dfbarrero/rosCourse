@@ -1,6 +1,6 @@
 # Programatic robot motion
 
-## Prerequisites
+## Objectives
 
 1.- First contact with ROS programming model
 2.- Deal with some of the main problems related with robot control

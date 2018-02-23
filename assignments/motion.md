@@ -8,12 +8,26 @@
 
 ## Prerequisites
 
-Install the ROS package ros_stdr_ga, available [here](https://github.com/dfbarrero/ros_stdr_ga). Follow the instructions available in the previous link.
+Install the following ROS packages:
 
-## Task
+* stdr_simulator
+* stdr_resources
+* stdr_gui
+* stdr_robot
 
-The task to perform in this assignmen is, at a first look, easy. Given the robot placed in the map shown in the figure, move it from its initial location in the bottom-left to the room located in the upper-right part of the map.
+Download the [launch file](simple_room.launch), which contains the scenario for this assignment. Verify that you can correctly run the launch file with roslaunch.
+
+## Practical assignment
+
+The goal to achieve in this assignmen is, at a first look, easy. Given the robot placed in the map shown bellow, move it from its initial location on the point A to the point B.
 
 ![Map](simple_room.png)
 
+To this end, perform the following tasks:
 
+1.- Create a new ROS package named simple_controller.
+2.- Create a subfolder launch.
+3.- Move the simple_room.launch file to the launch folder.
+4.- Implement a Python node which moves the robot from A to B.
+
+This is not a task as easy as it seems. You will have to deal with several difficulties, please, ask the instructor as those difficulties arise.

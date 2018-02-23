@@ -19,7 +19,7 @@ Download the [launch file](simple_room.launch), which contains the scenario for 
 
 ## Practical assignment
 
-The goal to achieve in this assignmen is, at a first look, easy. Given the robot placed in the map shown bellow, move it from its initial location on the point A to the point B.
+The goal to achieve in this assignmen is, at a first look, easy. Given the robot placed in the map shown below, move it from its initial location on point A to the point B.
 
 ![Map](simple_rooms.png)
 

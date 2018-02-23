@@ -4,7 +4,7 @@
 
 1.- First contact with ROS programming model.
 
-2.- Deal with some of the main problems involved in robot control.
+2.- Identify some of the main problems involved in robot control and ROS programming.
 
 ## Prerequisites
 

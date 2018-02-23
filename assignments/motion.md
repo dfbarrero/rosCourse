@@ -21,7 +21,7 @@ Download the [launch file](simple_room.launch), which contains the scenario for 
 
 The goal to achieve in this assignmen is, at a first look, easy. Given the robot placed in the map shown bellow, move it from its initial location on the point A to the point B.
 
-![Map](simple_room.png)
+![Map](simple_rooms.png)
 
 To this end, perform the following tasks:
 

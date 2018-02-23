@@ -1,6 +1,6 @@
 # Robot Operating System course
 
-## Contents
+## Contents
 
 1.- [Introduction to Robot Operating System](1-introduction/introduction.pdf)
 

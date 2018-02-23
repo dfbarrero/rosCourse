@@ -1,4 +1,4 @@
-# Programatic robot motion
+# Robot motion control with Rospy
 
 ## Objectives
 

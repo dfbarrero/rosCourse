@@ -19,7 +19,7 @@ Download the [launch file](simple_room.launch), which contains the scenario for 
 
 ## Practical assignment
 
-The goal to achieve in this assignmen is, at a first look, easy. Given the robot placed in the map shown below, move it from its initial location on point A to the point B.
+The goal to achieve in this assignment is, at a first sight, easy. Given the robot placed in the map shown below, move it from its initial location on point A to the point B.
 
 ![Map](simple_rooms.png)
 
@@ -33,4 +33,4 @@ To this end, perform the following tasks:
 
 4.- Implement a Python node which moves the robot from A to B.
 
-This is not a task as easy as it seems. You will have to deal with several difficulties, please, ask the instructor as those difficulties arise.
+You will have to deal with several difficulties, please, ask the instructor as those difficulties arise.

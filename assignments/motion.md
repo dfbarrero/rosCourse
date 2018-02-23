@@ -14,6 +14,6 @@ Install the ROS package ros_stdr_ga, available [here](https://github.com/dfbarre
 
 The task to perform in this assignmen is, at a first look, easy. Given the robot placed in the map shown in the figure, move it from its initial location in the bottom-left to the room located in the upper-right part of the map.
 
-![Map](simple_room.png)
+![Map](simple_rooms.png)
 
 

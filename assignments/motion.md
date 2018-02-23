@@ -1,4 +1,4 @@
-# Robot motion control with Rospy
+# Robot basic motion control with Rospy
 
 ## Objectives
 

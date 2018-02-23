@@ -2,9 +2,9 @@
 
 ## Objectives
 
-1.- First contact with ROS programming model
+1.- First contact with ROS programming model.
 
-2.- Deal with some of the main problems involved in robot control
+2.- Deal with some of the main problems involved in robot control.
 
 ## Prerequisites
 
@@ -26,8 +26,11 @@ The goal to achieve in this assignmen is, at a first look, easy. Given the robot
 To this end, perform the following tasks:
 
 1.- Create a new ROS package named simple_controller.
+
 2.- Create a subfolder launch.
+
 3.- Move the simple_room.launch file to the launch folder.
+
 4.- Implement a Python node which moves the robot from A to B.
 
 This is not a task as easy as it seems. You will have to deal with several difficulties, please, ask the instructor as those difficulties arise.

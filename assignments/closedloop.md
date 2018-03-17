@@ -27,6 +27,23 @@ A very convenient way to represent FSM is throgh a directed graph in which the s
 
 <img src="closed/fsmexample.png" alt="FSM example" width="400px"/>
 
+Where s_i means state i and E_j means event j.
+
+The implementation of a FSM is straightforward. A naïve implementation can use a variable to store the current state and a if-elseif or switch-case statement to assess the state and implement the logic associated with it. 
+
+~~~Python
+state = "RUNNING"
+
+if state == "WALKING":
+	# Do something
+	state = "WALKING";
+elif state == "RUNNING";
+	# Do something
+	state = "IDLE";
+~~~
+
+Much more complex can be used in case the number of states were high, or FSMs that can change in time. For us the simple implementation previously shown makes our job.
+
 Finite-State Machines are widely studied in a Mathematics and Computer Science field named Automata Theory, and has a deep impact in Computation. 
 
 ## Practical assignment

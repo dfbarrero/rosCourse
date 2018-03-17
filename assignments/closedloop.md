@@ -6,7 +6,7 @@
 
 2.- Implement a closed-loop robot controller.
 
-3.- Implement a realistic robot motion controller
+3.- Implement a realistic robot motion controller more precise than the previous assignment.
 
 ## Prerequisites
 
@@ -32,14 +32,18 @@ Where s_i means state i and E_j means event j.
 The implementation of a FSM is straightforward. A naïve implementation can use a variable to store the current state and a if-elseif or switch-case statement to assess the state and implement the logic associated with it. 
 
 ~~~Python
-state = "RUNNING"
-
-if state == "WALKING":
-	# Do something
-	state = "WALKING";
-elif state == "RUNNING";
-	# Do something
-	state = "IDLE";
+state = "MOVING"
+...
+if state == "MOVING":
+	# Analize event
+	# Execute actions in this state
+	# Change to next state (if needed)
+	state = "IDLE"
+elif state == "IDLE":
+	# Analize event
+	# Execute actions in this state
+	# Change to next state (if needed)
+	state = "MOVING"
 ~~~
 
 Much more complex can be used in case the number of states were high, or FSMs that can change in time. For us the simple implementation previously shown makes our job.
@@ -52,13 +56,24 @@ The goal to achieve in this assignment is the same one that the previous assignm
 
 To this end, perform the following tasks:
 
-1.- Create a new ROS package named fsm_controller.
+1.- Create a new ROS package named `fsm_controller`.
 
-2.- Create a subfolder launch.
+2.- Create a subfolder `launch` and move the [launch file](motion/simple_room.launch) file to that folder.
 
-3.- Move the simple_room.launch file to the launch folder.
-
-4.- Implement a Python node named `fsm_controller` which moves the robot from A to B. To this end implement the FSM shown in the figure.
-
+4.- Implement a Python node named `fsm_controller` which implements the motion control based on the odometry. To this end the node must listen to messages of type `geometry_msgs/Point` reaching the topic `/motion`. The message must contain a vector with the distance that the robot must move in form `(x,0,0)` or `(y,0,0)`. Ignore the z-component of the vector. When a message arrives, the controller must store the initial odometry value and move the robot to the desired direction (always on x or y, never mixed) until the odometry indicates that the objective has been achieved. Use the FSM defined in the next figure to handle the robot states.
 
 <img src="closed/fsm.png" alt="FSM example" width="400px"/>
+
+The robot may stay in one of the following states:
+
+* *idle*: The robot is stopped waiting for commands.
+
+* *MOVING_NORTH*: It represents that the robot is moving north. The robot enters in this state when a message with the form `(y,0,0)` arrives to the topic `/motion`. White the robot is in the state `MOVING_NORTH` throws away any message received in the topic `/motion`.
+
+* *MOVING_SOUTH*: It represents that the robot is moving south. The robot enters in this state when a message with the form `(-y,0,0)` arrives to the topic `/motion`. White the robot is in the state `MOVING_SOUTH` throws away any message received in the topic `/motion`.
+
+* *MOVING_WEST*: It represents that the robot is moving west. The robot enters in this state when a message with the form `(x,0,0)` arrives to the topic `/motion`. White the robot is in the state `MOVING_WEST` throws away any message received in the topic `/motion`.
+
+* *MOVING_EAST*: It represents that the robot is moving east. The robot enters in this state when a message with the form `(-x,0,0)` arrives to the topic `/motion`. White the robot is in the state `MOVING_EAST` throws away any message received in the topic `/motion`.
+
+5.- Implement the logic needed to move the robot from A to B.

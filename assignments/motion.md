@@ -15,13 +15,13 @@ Install the following ROS packages:
 * stdr_gui
 * stdr_robot
 
-Download the [launch file](simple_room.launch), which contains the scenario for this assignment. Verify that you can correctly run the launch file with roslaunch.
+Download the [launch file](motion/simple_room.launch), which contains the scenario for this assignment. Verify that you can correctly run the launch file with roslaunch.
 
 ## Practical assignment
 
 The goal to achieve in this assignment is, at a first sight, easy. Given the robot placed in the map shown below, move it from its initial location on point A to the point B.
 
-![Map](simple_rooms.png)
+![Map](motion/simple_rooms.png)
 
 To this end, perform the following tasks:
 

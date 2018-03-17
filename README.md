@@ -12,6 +12,8 @@
 
 1.- [Basic robot motion control with Rospy](assignments/motion.md)
 
+2.- [Closed-loop odometry-based robot motion control](assignments/closedloop.md)
+
 ## Compilation
 
 Compile slides with xelatex or lualatex. Custom UAH fonts are needed to properly compile the project. The original template used to format the slides, including the fonts, can be downloaded from [this repository](https://github.com/dfbarrero/UAH-beamer-template).

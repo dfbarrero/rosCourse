@@ -1,3 +1,6 @@
+% Generar PNG
+% convert -density 600 fsmexample.pdf -quality 95 fsmexample.png
+
 \documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
 %\usetikzlibrary{...}% tikz package already loaded by 'tikz' option
 \usepackage{tikz}
@@ -17,10 +20,10 @@ initial text=$ $, % sets the text that appears on the start arrow
 \node[state, accepting, right of=q1] (q2) {$s_2$};
 \node[state, right of=q2] (q3) {$s_3$};
 
-\draw (q1) edge[loop above] node{Event A} (q1)
-(q1) edge[above] node{Event B} (q2)
-(q2) edge[loop above] node{Event C} (q2)
-(q2) edge[bend left, above] node{Event D} (q3)
-(q3) edge[bend left, below] node{Event E} (q2);
+\draw (q1) edge[loop above] node{$E_1$} (q1)
+(q1) edge[above] node{$E_2$} (q2)
+(q2) edge[loop above] node{$E_3$} (q2)
+(q2) edge[bend left, above] node{$E_4$} (q3)
+(q3) edge[bend left, below] node{$E_5$} (q2);
 \end{tikzpicture}
 \end{document}

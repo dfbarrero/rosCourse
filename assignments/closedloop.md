@@ -25,7 +25,7 @@ A Finite-State Machine (os simply FSM) is an abstract machine that models its be
 
 A very convenient way to represent FSM is throgh a directed graph in which the states are represented by circles and the transitions among states with directed edges. The initial state is usually represented with a double circle and there is also a final state.
 
-<img src="fsmexample.png" alt="FSM example" style="width: 200px;"/>
+<img src="fsmexample.png" alt="FSM example" style="width: 100px;"/>
 
 Finite-State Machines are widely studied in a Mathematics and Computer Science field named Automata Theory, and has a deep impact in Computation. 
 

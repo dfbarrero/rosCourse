@@ -48,16 +48,17 @@ Finite-State Machines are widely studied in a Mathematics and Computer Science f
 
 ## Practical assignment
 
-The goal to achieve in this assignment is, at a first sight, easy. Given the robot placed in the map shown below, move it from its initial location on point A to the point B.
+The goal to achieve in this assignment is the same one that the previous assignment, "Basic robot motion control with Rospy". Given the robot placed in the map shown below, move it from its initial location on point A to the point B. In this case we will use a more elaborated mechanism to control the robot motion based on a FSM and odometry.
 
 To this end, perform the following tasks:
 
-1.- Create a new ROS package named simple_controller.
+1.- Create a new ROS package named fsm_controller.
 
 2.- Create a subfolder launch.
 
 3.- Move the simple_room.launch file to the launch folder.
 
-4.- Implement a Python node which moves the robot from A to B.
+4.- Implement a Python node named `fsm_controller` which moves the robot from A to B. To this end implement the FSM shown in the figure.
 
-You will have to deal with several difficulties, please, ask the instructor as those difficulties arise.
+
+<img src="closed/fsm.png" alt="FSM example" width="400px"/>

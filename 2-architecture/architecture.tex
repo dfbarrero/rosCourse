@@ -285,6 +285,20 @@
 \end{frame}
 
 \begin{frame}{The computation graph level}{Topics (III)}
+	rostopic pub has three operation modes
+  	\begin{itemize}
+		\item Latch mode: \texttt{rostopic pub -l}
+		\item Once mode: \texttt{rostopic pub -1}
+		\item Rate mode: \texttt{rostopic pub -r 10}
+	\end{itemize}
+	Command-line argument passing
+  	\begin{itemize}
+		\item \texttt{rostopic pub -1 /my\_point geometry\_msgs/Point '{x: 1, y: -2, z: 3}'}
+		\item \texttt{rostopic pub -1 /my\_point geometry\_msgs/Point -- 1 -2 3}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{The computation graph level}{Topics (IV)}
 	\begin{block}{Exercises}
   	\begin{itemize}
 		\item Run the turtlebot simulation

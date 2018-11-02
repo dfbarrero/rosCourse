@@ -2,11 +2,11 @@
 
 ## Contents
 
-1.- [Introduction to Robot Operating System](1-introduction/introduction.pdf)
+1.- [Introduction to Robot Operating System](1-introduction/)
 
-2.- [ROS architecture](2-architecture/architecture.pdf)
+2.- [ROS architecture](2-architecture/)
 
-3.- [Programming ROS with Python](3-programming/programming.pdf)
+3.- [Programming ROS with Python](3-programming/)
 
 ## Assignments
 
